@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import BalanceSection from "./components/BalanceSection";
+import ListGroup from "./components/ListGroup";
+import MainSection from "./components/MainSection";
+import Navbar from "./components/Navbar";
+import {v4 as uuidv4} from 'uuid';
 
 function App() {
+
+
+  const [transactions, setTransactions] = useState([])
+
+  const saveTransaction = (transaction) =>{
+    const newTransaction = {
+      id : uuidv4(),
+      text : transaction.text,
+      amount : parseInt(transaction.amount)
+    }
+    setTransactions([...transactions ,newTransaction ])
+  }
+
+  const deleteTransaction = (id) =>{
+    setTransactions(transactions.filter(item => item.id !== id))
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar />
+      <div className="container">
+        <MainSection transactions={transactions} saveTransaction={saveTransaction}/>
+        <BalanceSection transactions={transactions}/>
+        <ListGroup transactions={transactions} deleteTransaction={deleteTransaction}/>
+      </div>
+    </>
   );
 }
 
